@@ -1,3 +1,5 @@
+#Here we lay out all the VPC components needed to create a fully functional VPC
+#Note some of these resources are only useful if creating a private subnet as an addition
 #The VPC is defined with a cidr block
 resource "aws_vpc" "web-vpc" {
   cidr_block = "10.0.0.0/16"
@@ -87,12 +89,18 @@ resource "aws_internet_gateway" "web-gw" {
 
 
 #A reference Elastic IP request
+#This is commented out by default as it is not needed, our single instance is assigned a random elastic IP address set via the "associate public IP address" feature in the instance declaration
+#You would enable and use these if needing to create several elastic IPs to associate with multiple instances
+/*
 resource "aws_eip" "web-eip" {
   depends_on = [aws_internet_gateway.web-gw]
   vpc      = true
-}
+}*/
 
-#A refernce NAT gateway
+#A reference NAT gateway
+#This is commented out by default as our single subnet is already public, and does not need a gateway to route traffic for it.
+#You would enable and use this if you were also creating a private subnet alongside (might be used for database services)
+/*
 resource "aws_nat_gateway" "web-nat" {
   allocation_id = aws_eip.web-eip.id
   subnet_id = aws_subnet.web-subnet.id
@@ -102,7 +110,7 @@ resource "aws_nat_gateway" "web-nat" {
   }
 
   depends_on = [aws_internet_gateway.web-gw]
-}
+}*/
 
 #The Route Table for our subnet
 resource "aws_route_table" "web-rt" {
@@ -114,11 +122,14 @@ resource "aws_route_table" "web-rt" {
 }
 
 #Lets route the gateway to the route table
+#This is commented out by default as our simple instance already has public routing thanks to its elastic IP
+#You would enable this if you were using a private DNS and wanted to give it access to the public internet
+/*
 resource "aws_route" "public_internet_gateway" {
   route_table_id         = "${aws_route_table.web-rt.id}"
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = "${aws_internet_gateway.web-gw.id}"
-}
+}*/
 
 #Lets associate our route table to the subnet here
 resource "aws_route_table_association" "web-publicrt" {
