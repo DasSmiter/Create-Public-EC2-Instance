@@ -1,3 +1,6 @@
+#The main file declares the basics of our AWS components related to the instance, though we also store the region here
+#The VPC.tf file contains the declarations for our various VPC components for networking access
+
 provider "aws" {
   # Us East 1 region allows for future component additions, its the most useful of them.
   # This would need to be replaced if using another region

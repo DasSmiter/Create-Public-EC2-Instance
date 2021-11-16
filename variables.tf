@@ -1,3 +1,6 @@
+#The Variables file is where we store all the variables used in the deployment
+#You can edit here rather than searching through the various TF files
+
 #Main variables
 
 variable "aws_region" {

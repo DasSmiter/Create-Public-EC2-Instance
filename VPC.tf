@@ -1,5 +1,6 @@
 # Here we lay out all the VPC components needed to create a fully functional VPC
 # Note some of these resources are only useful if creating a private subnet as an addition
+
 # The VPC is defined with a cidr block
 resource "aws_vpc" "web-vpc" {
   cidr_block = var.aws_vpc_cidr
@@ -63,7 +64,7 @@ resource "aws_security_group" "web-sg" {
   ]
 
   tags = {
-    Name = "allow_tls"
+    Name = "Allow SSH/HTTP"
   }
 }
 
@@ -122,7 +123,7 @@ resource "aws_route_table" "web-rt" {
 }
 
 
-# Lets route the gateway to the route table
+# Lets route the outgoing traffic from the subnet to the IGW
 resource "aws_route" "public_internet_gateway" {
   route_table_id         = "${aws_route_table.web-rt.id}"
   destination_cidr_block = "0.0.0.0/0"

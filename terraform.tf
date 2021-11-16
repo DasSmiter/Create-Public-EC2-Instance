@@ -1,3 +1,5 @@
+#The main Terraform file that declares which providers we'll be making use of
+
 terraform {
   required_providers {
     #Since we are setting up an EC2 instance we will be using AWS services for this.
